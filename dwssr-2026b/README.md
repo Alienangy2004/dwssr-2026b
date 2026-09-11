@@ -1,4 +1,4 @@
-![pleca_itgam](/.github/assests/pleca_itgam.jpg)
+![pleca_itgam](./.github/assets/pleca_itgam.jpg)
 
 # Martinez Sanchez Angel Armando
 
