@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
-    "dev": "node ./bin/www",
+    "start": "node ./server/bin/www",
+    "dev": "node ./server/bin/www",
     "greet": "echo 'hola mundo'"
   },
   "dependencies": {
