@@ -2,6 +2,7 @@
   "name": "webservicessr",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "start": "node ./server/bin/www",
     "dev": "node ./server/bin/www",
