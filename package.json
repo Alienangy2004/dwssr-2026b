@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "node ./server/bin/www",
-    "dev": "cross-env DEBUG=dwssr-2026:* node ./server/bin/www",
+    "dev": "cross-env DEBUG=dwssr-2026:* nodemon ./server/bin/www",
     "greet": "echo 'hola mundo'"
   },
   "dependencies": {
@@ -17,6 +17,7 @@
     "morgan": "~1.9.1"
   },
   "devDependencies": {
-    "cross-env": "^10.1.0"
+    "cross-env": "^10.1.0",
+    "nodemon": "^3.1.14"
   }
 }
