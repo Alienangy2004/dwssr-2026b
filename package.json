@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "node ./server/bin/www",
-    "dev": "node ./server/bin/www",
+    "dev": "cross-env DEBUG=dwssr-2026:* node ./server/bin/www",
     "greet": "echo 'hola mundo'"
   },
   "dependencies": {
@@ -15,5 +15,8 @@
     "hbs": "~4.0.4",
     "http-errors": "~1.6.3",
     "morgan": "~1.9.1"
+  },
+  "devDependencies": {
+    "cross-env": "^10.1.0"
   }
 }
