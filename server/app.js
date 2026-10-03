@@ -16,8 +16,8 @@ import Debug from 'debug';
 const debug = Debug('dwssr-2026:app');
 
 // Se importan las rutas de la aplicacion
-import indexRouter from './routes/index.js';
-import usersRouter from './routes/users.js';
+import indexRouter from '#routes/index.js';
+import usersRouter from '#routes/users.js';
 
 // Recreación de __dirname para ES Modules
 const __filename = fileURLToPath(import.meta.url);
