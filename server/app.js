@@ -11,6 +11,10 @@ import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 // Herramienta de depuración
 import Debug from 'debug';
+// Importando el template engine Handlebars
+import hbs from 'hbs';
+// Importando el registrador del Helper (CORREGIDO: Se agregó .js y se combinaron)
+import { registerViteHelper, viteAssets } from './lib/vite.js';
 
 // Inicializa debug con el namespace deseado
 const debug = Debug('dwssr-2026:app');
@@ -24,7 +28,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Crea la aplicacion de express
-debug(" creando backend");
+debug("creando backend");
 const app = express();
 
 // Configura el motor de vistas
@@ -37,8 +41,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+// Archivos estaticos para produccion
+if(process.env.NODE_ENV === 'production'){
+  app.use(express.static(path.join(__dirname, '..', 'dist')));
+}
+
 // Configuracion de archivos estaticos
-debug(" creando servicios de archivos estaticos");
+debug("creando servicios de archivos estaticos");
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
 // Registramos las rutas
