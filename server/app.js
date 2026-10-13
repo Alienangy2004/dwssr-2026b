@@ -13,8 +13,8 @@ import logger from 'morgan';
 import Debug from 'debug';
 // Importando el template engine Handlebars
 import hbs from 'hbs';
-// Importando el registrador del Helper (CORREGIDO: Se agregó .js y se combinaron)
-import { registerViteHelper, viteAssets } from './lib/vite.js';
+// Importando el helper de Vite (Se eliminó registerViteHelper porque no se usa)
+import { viteAssets } from './lib/vite.js';
 
 // Inicializa debug con el namespace deseado
 const debug = Debug('dwssr-2026:app');
@@ -34,6 +34,9 @@ const app = express();
 // Configura el motor de vistas
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
+
+// Registra el helper de Vite en Handlebars para que se puedan usar en las vistas
+hbs.registerHelper('viteAssets', viteAssets);
 
 // Configura los middlewares de la aplicacion
 app.use(logger('dev'));
@@ -60,7 +63,8 @@ app.use((req, res, next) => {
   next(createError(404));
 });
 
-// Error handler
+// Error handler (Se le indica a ESLint que ignore el parámetro next no usado)
+// eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};

@@ -5,11 +5,12 @@ let counter = 0;
 const numbers = [];
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+// Se eliminó el parámetro 'next'
+router.get('/', function(req, res) {
     counter++;
     numbers.push(counter);
     res.render('index', { 
-        title: 'Martinez Sanchez Angel', /* Puedes cambiar 'Cruz Torres Ricardo' por tu propio nombre */
+        title: 'Martinez Sanchez Angel', 
         counter,
         numbers
     });
