@@ -64,7 +64,7 @@ app.use((req, res, next) => {
 });
 
 // Error handler (Se le indica a ESLint que ignore el parámetro next no usado)
-// eslint-disable-next-line no-unused-vars
+// eslint-disable-next-line
 app.use((err, req, res, next) => {
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
