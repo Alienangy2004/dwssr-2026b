@@ -1,63 +1,68 @@
 import js from "@eslint/js";
 import globals from "globals";
+import { defineConfig } from "eslint/config";
 
-export default [
-  // Carga las reglas recomendadas por defecto para todos los archivos
-  js.configs.recommended,
-
-  // Ignora los build y módulos
+export default defineConfig([
+  // 1) Ignora los build de front
   {
     ignores: [
-      "dist/**", // Ignora carpeta dist
+      "dist/**", // Ignora carpeta de dist
       "node_modules/**"
     ]
   },
-
-  // Config del back-end
+  // 2) Condig del Back-end
   { 
-    files: ["server/**/*.{js,mjs}"], 
-    languageOptions: { 
+    files: ["server/**/*.{js,mjs}"],
+    plugins: { js }, 
+    extends: ["js/recommended"], 
+    languageOptions: {
       ecmaVersion: "latest",
       sourceType: "module",
       globals: {
         ...globals.node
-      } 
-    } 
-  },
-
-  // Config del front-end
+        } 
+      } ,
+      rules:{
+        "no-unused-vars": ["error", {"argsIgnorePattern":"^_"}]
+      }
+    },
+  // 2.1) Config de Vite
   { 
-    files: ["src/**/*.{js,mjs}"], 
-    languageOptions: { 
-      ecmaVersion: "latest",
-      sourceType: "module",
-      globals: {
-        ...globals.browser
-      } 
-    } 
-  },
-
-  // Config vite
-  { 
-    files: ["vite.config.js"], 
-    languageOptions: { 
+    files: ["vite.config.js"],
+    plugins: { js }, 
+    extends: ["js/recommended"], 
+    languageOptions: {
       ecmaVersion: "latest",
       sourceType: "module",
       globals: {
         ...globals.node
+        } 
       } 
-    } 
-  },
-
-  // Opcional si hay js en public
+    },
+  // 3) Condig del front-end
   { 
-    files: ["public/**/*.{js,mjs}"], 
-    languageOptions: { 
+    files: ["src/**/*.{js,mjs}"],
+    plugins: { js }, 
+    extends: ["js/recommended"], 
+    languageOptions: {
       ecmaVersion: "latest",
       sourceType: "module",
       globals: {
         ...globals.browser
+        } 
       } 
-    } 
-  }
-];
+    },
+  // 4) Opcional si hay js en public
+  { 
+    files: ["public/**/*.{js,mjs}"],
+    plugins: { js }, 
+    extends: ["js/recommended"], 
+    languageOptions: {
+      ecmaVersion: "latest",
+      sourceType: "module",
+      globals: {
+        ...globals.browser
+        } 
+      } 
+    },
+]);

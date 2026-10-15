@@ -1,64 +1,74 @@
-import fs from 'node:fs';
-import path from 'node:path';
+//flujo de archivos
+import fs from 'node:fs'
+//viblioteca de rutas
+import path from 'node:path'
 import { fileURLToPath } from 'node:url';
+// eslint-disable-next-line
+import {dirname} from 'node:path';
 
+//creando variables de rutas
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 /**
- * Helper para Handler que genera las etiquetas de vite
- * en desarrollo: conecta al servidor de desarrollo de vite
- * en produccion: usa los compilados de vite
+ * Helper para handlebars que genera las etiquetas de vite
+ * En desarrooll: conecta al servidor de sewsaroollo de cite
+ * En producion: usa los compilados de vite
  */
-export function viteAssets() {
-    // Obtener modo de ejecucion
+export function viteAssets(){
+    //obtener modo de ejecucion
     const isDev = process.env.NODE_ENV !== 'production';
-    // Rescatando la URL del servidor de desarrollo
-    const viteDevServer = process.env.VITE_DEV_SERVER || 'http://localhost:5173';
-
-    // si estamos en modo de desarrollo
-    if (isDev) {
-        // en desarrollo cargamos los archivos del front end directamente del servidor de vite
+// rescatando la url del servidor de desarooloo
+    const viteDevServer = process.env.VITE_SERVER || 'https://glorious-spork-7v9xxwjgp4543xjp6-5173.app.github.dev';
+    if(isDev){
+        //el desarollo cargamos los archivos del frontend directamente del servidor de desarrollo de vite
         return `
+        
         <script type="module" src="${viteDevServer}/@vite/client"></script>
         <script type="module" src="${viteDevServer}/main.js"></script>
-        `;
+        `
     }
+    //en producion leemos el manifest 
+    // //y generamos las etiquetas finales de produccion
+    const manifestPath = path.join(__dirname, '..', '..', 'dist', '.vite', 'manifest.json');
 
-    // en produccion leemos el manifest y generamos las etiquetas finales de produccion
-    const manifestPath = path.join(__dirname, '..', '..', 'dist', 'manifest.json');
-    
-    // si no existe el manifest
+    //si no existe el manifiesto
     if (!fs.existsSync(manifestPath)) {
-        console.warn("Vite manifest not found. Run 'npm run build'");
+        console.warn("Vite Manifest not found. Run npm run build");
+        return'';
+    }
+    //lellendon y parcendo a json el archivo
+    //de manifiesto que genera vite an la compilacion
+    //de los archivos del front-end
+    const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+    //obteniendo la ruta del punto dde entrada del front-end
+    const mainEntry = manifest['main.js']
+    //guarda del main.js
+    if(!mainEntry){
+        console.warn('el archivo main.js no esta disponible enn el manifiesto de vite');
         return '';
     }
-
-    // Leyendo y parseando a JSON el archivo de manifiesto
-    const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf-8'));
-    const mainEntry = manifest['main.js'];
-
-    // Guardia del main.js (Si NO existe, lanzamos advertencia)
-    if (!mainEntry) {
-        console.warn('Archivo main.js no está disponible en el manifest de Vite');
-        return '';
-    }
-
     let tags = '';
     
-    if (mainEntry.css) {
-        mainEntry.css.forEach(cssfile => {
-            tags += `<link rel="stylesheet" href="/${cssfile}">\n`;
+    //css files
+    if(mainEntry.css){
+        mainEntry.css.forEach((cssFiles) => {
+            tags += `<link rel="stylesheet" href="/${cssFiles}">\n`;
         });
     }
-    
-    tags += `<script type="module" src="/${mainEntry.file}defer"></script>`;
+
+    //js files
+    tags += `<script type="module" src="/${mainEntry.file}"defer></script>`;
+
     return tags;
 }
-//funcion registradora del helper
-export function registerViteHelper(hbs){
-  hbs.register('viteAssets', ()=>{
-    //sanitizando la salida del helper
-    return new hbs.SafeString(viteAssets())
-  })
+/**
+ * Funcion registradora del hemper de handlebars
+ * 
+ */
+export function registerViteHelper(hbs) {
+    hbs.registerHelper('viteAssets', ()=>{
+    //sanitizando la salida de helper
+        return new hbs.SafeString(viteAssets());
+    });
 }

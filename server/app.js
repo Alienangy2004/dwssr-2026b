@@ -5,38 +5,39 @@ import express from 'express';
 // Importa modulos para manejar rutas (path)
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+// eslint-disable-next-line
+import {dirname} from 'node:path';
+
+//importando el template engine handlebars
+import hbs from 'hbs';
+
+//importando el registrador del helper
+import { registerViteHelper } from './lib/vite.js';
+
 // Para cookies
 import cookieParser from 'cookie-parser';
 // Registro para saber que pasa en el servidor (Morgan)
 import logger from 'morgan';
-// Herramienta de depuración
-import Debug from 'debug';
-// Importando el template engine Handlebars
-import hbs from 'hbs';
-// Importando el helper de Vite (Se eliminó registerViteHelper porque no se usa)
-import { viteAssets } from './lib/vite.js';
-
-// Inicializa debug con el namespace deseado
-const debug = Debug('dwssr-2026:app');
+//importaando debug
+import createDebug from 'debug';
 
 // Se importan las rutas de la aplicacion
 import indexRouter from '#routes/index.js';
 import usersRouter from '#routes/users.js';
 
 // Recreación de __dirname para ES Modules
+const debug =createDebug('dwssr-2026b:server');
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Crea la aplicacion de express
-debug("creando backend");
+debug("🔨creado back end");
 const app = express();
 
 // Configura el motor de vistas
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
-
-// Registra el helper de Vite en Handlebars para que se puedan usar en las vistas
-hbs.registerHelper('viteAssets', viteAssets);
+registerViteHelper(hbs)
 
 // Configura los middlewares de la aplicacion
 app.use(logger('dev'));
@@ -44,17 +45,17 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-// Archivos estaticos para produccion
-if(process.env.NODE_ENV === 'production'){
+//archivos estaticos para producion
+if(process.env.NODE_ENV === 'production' ){
   app.use(express.static(path.join(__dirname, '..', 'dist')));
 }
 
 // Configuracion de archivos estaticos
-debug("creando servicios de archivos estaticos");
+debug("🔨Configuración de archivos estáticos");
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
 // Registramos las rutas
-debug("registrando rutas");
+debug("🖼 Registramos las rutas") ;
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
@@ -63,13 +64,23 @@ app.use((req, res, next) => {
   next(createError(404));
 });
 
-// Error handler (Se le indica a ESLint que ignore el parámetro next no usado)
-// eslint-disable-next-line
-app.use((err, req, res, next) => {
+// Error handler
+
+app.use((err, req, res, _next) => {
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
   res.status(err.status || 500);
   res.render('error');
 });
+//ejemplo de codigo inlcanzable
+//(()=>{
+  //let age=10
+  
+  //if (age< 10) {
+    //console.log("age is less than 10")
+  //}
+  //return age
+//})()
 
+//module.exports = app;
 export default app;

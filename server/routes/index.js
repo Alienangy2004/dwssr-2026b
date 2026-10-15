@@ -1,19 +1,20 @@
-import express from 'express';
+import express from 'express'
 const router = express.Router();
 
 let counter = 0;
-const numbers = [];
-
+const numbers= []
 /* GET home page. */
-// Se eliminó el parámetro 'next'
-router.get('/', function(req, res) {
-    counter++;
-    numbers.push(counter);
-    res.render('index', { 
-        title: 'Martinez Sanchez Angel', 
-        counter,
-        numbers
-    });
+// eslint-disable-next-line
+router.get('/', function(req, res, next) {
+  counter++;
+  numbers.push(counter);
+  res.render('index', { title: 'Martinez Sanchez Angel Armando', 
+    counter,
+    numbers
+  });
+  
+
 });
 
+//
 export default router;
