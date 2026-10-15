@@ -1,8 +1,7 @@
 @import "tailwindcss";
-/*
-Linea que informa a tailwind donde estan las vistas de nuestra app
-*/
-@source "../../server/views/**/*.hbs"
+
+/* Linea que informa a tailwind donde estan las vistas de nuestra app */
+@source "../../server/views/**/*.hbs";
 
 body {
     padding: 50px;
@@ -11,6 +10,5 @@ body {
 
 h1 {
     color: crimson;
-    font-size: 80px; 
+    font-size: 80px;
 }
-
