@@ -1,32 +1,32 @@
 // Funcion para manejar errores en la aplicacion
-import createError from 'http-errors';
+import createError from "http-errors";
 // Importa el framework express
-import express from 'express';
+import express from "express";
 // Importa modulos para manejar rutas (path)
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 // eslint-disable-next-line
 import {dirname} from 'node:path';
 
 //importando el template engine handlebars
-import hbs from 'hbs';
+import hbs from "hbs";
 
 //importando el registrador del helper
-import { registerViteHelper } from './lib/vite.js';
+import { registerViteHelper } from "./lib/vite.js";
 
 // Para cookies
-import cookieParser from 'cookie-parser';
+import cookieParser from "cookie-parser";
 // Registro para saber que pasa en el servidor (Morgan)
-import logger from 'morgan';
+import logger from "morgan";
 //importaando debug
-import createDebug from 'debug';
+import createDebug from "debug";
 
 // Se importan las rutas de la aplicacion
-import indexRouter from '#routes/index.js';
-import usersRouter from '#routes/users.js';
+import indexRouter from "#routes/index.js";
+import usersRouter from "#routes/users.js";
 
 // Recreación de __dirname para ES Modules
-const debug =createDebug('dwssr-2026b:server');
+const debug =createDebug("dwssr-2026b:server");
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -35,29 +35,29 @@ debug("🔨creado back end");
 const app = express();
 
 // Configura el motor de vistas
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'hbs');
-registerViteHelper(hbs)
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "hbs");
+registerViteHelper(hbs);
 
 // Configura los middlewares de la aplicacion
-app.use(logger('dev'));
+app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 //archivos estaticos para producion
-if(process.env.NODE_ENV === 'production' ){
-  app.use(express.static(path.join(__dirname, '..', 'dist')));
+if(process.env.NODE_ENV === "production" ){
+  app.use(express.static(path.join(__dirname, "..", "dist")));
 }
 
 // Configuracion de archivos estaticos
 debug("🔨Configuración de archivos estáticos");
-app.use(express.static(path.join(__dirname, '..', 'public')));
+app.use(express.static(path.join(__dirname, "..", "public")));
 
 // Registramos las rutas
 debug("🖼 Registramos las rutas") ;
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use("/", indexRouter);
+app.use("/users", usersRouter);
 
 // Catch 404 and forward to error handler
 app.use((req, res, next) => {
@@ -68,9 +68,9 @@ app.use((req, res, next) => {
 
 app.use((err, req, res, _next) => {
   res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  res.locals.error = req.app.get("env") === "development" ? err : {};
   res.status(err.status || 500);
-  res.render('error');
+  res.render("error");
 });
 //ejemplo de codigo inlcanzable
 //(()=>{

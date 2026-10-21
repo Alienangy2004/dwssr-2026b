@@ -1,5 +1,9 @@
 {
-  "terminal.integrated.fontSize": 14,
-  "editor.fontSize": 16,
-  "editor.tabSize": 2
+  //Indica cuando guardamos un archivo para poder eleminar los errores sin interventicion del programador
+  "editor.codeActionsOnSave": {
+    // hacemos que se utilize la extension eslint para que arregle los errores de manera automatica al momento de guardar el archivo
+    "source.fixAll.eslint": "always" 
+  },
+  //asegura que eslint sea la unica herramienta para modificar y acomodar los errores y es medida de seguridad
+  "editor.formatOnSave": false
 }

@@ -1,8 +1,8 @@
 //flujo de archivos
-import fs from 'node:fs'
+import fs from "node:fs";
 //viblioteca de rutas
-import path from 'node:path'
-import { fileURLToPath } from 'node:url';
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 // eslint-disable-next-line
 import {dirname} from 'node:path';
 
@@ -17,38 +17,38 @@ const __dirname = path.dirname(__filename);
  */
 export function viteAssets(){
     //obtener modo de ejecucion
-    const isDev = process.env.NODE_ENV !== 'production';
+    const isDev = process.env.NODE_ENV !== "production";
 // rescatando la url del servidor de desarooloo
-    const viteDevServer = process.env.VITE_SERVER || 'https://glorious-spork-7v9xxwjgp4543xjp6-5173.app.github.dev';
+    const viteDevServer = process.env.VITE_SERVER || "https://glorious-spork-7v9xxwjgp4543xjp6-5173.app.github.dev";
     if(isDev){
         //el desarollo cargamos los archivos del frontend directamente del servidor de desarrollo de vite
         return `
         
         <script type="module" src="${viteDevServer}/@vite/client"></script>
         <script type="module" src="${viteDevServer}/main.js"></script>
-        `
+        `;
     }
     //en producion leemos el manifest 
     // //y generamos las etiquetas finales de produccion
-    const manifestPath = path.join(__dirname, '..', '..', 'dist', '.vite', 'manifest.json');
+    const manifestPath = path.join(__dirname, "..", "..", "dist", ".vite", "manifest.json");
 
     //si no existe el manifiesto
     if (!fs.existsSync(manifestPath)) {
         console.warn("Vite Manifest not found. Run npm run build");
-        return'';
+        return"";
     }
     //lellendon y parcendo a json el archivo
     //de manifiesto que genera vite an la compilacion
     //de los archivos del front-end
-    const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+    const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
     //obteniendo la ruta del punto dde entrada del front-end
-    const mainEntry = manifest['main.js']
+    const mainEntry = manifest["main.js"];
     //guarda del main.js
     if(!mainEntry){
-        console.warn('el archivo main.js no esta disponible enn el manifiesto de vite');
-        return '';
+        console.warn("el archivo main.js no esta disponible enn el manifiesto de vite");
+        return "";
     }
-    let tags = '';
+    let tags = "";
     
     //css files
     if(mainEntry.css){
@@ -67,7 +67,7 @@ export function viteAssets(){
  * 
  */
 export function registerViteHelper(hbs) {
-    hbs.registerHelper('viteAssets', ()=>{
+    hbs.registerHelper("viteAssets", ()=>{
     //sanitizando la salida de helper
         return new hbs.SafeString(viteAssets());
     });
