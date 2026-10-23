@@ -35,3 +35,13 @@ En este proyecto seguimos la convención de [Conventional Commits](https://www.c
 | 👷 | `ci` | Modificaciones en pipelines, GitHub Actions o flujos CI/CD | `👷 ci: setup github workflow for lint check` |
 | 🔒️ | `security` | Parches de seguridad o tratamiento de vulnerabilidades | `🔒️ security: sanitize user inputs against xss` |
 | 🌐 | `i18n` | Soporte multiidioma, traducción o localización | `🌐 i18n: add spanish locale dictionaries` |
+
+# Instalacion de la guia de airbnb
+
+Para poder instalar la guia de estilos de airbnn necesitaremos tener las sig. dependencias:
+- @eslint/eslintrc Modulo interno de ESLINT codigo JS
+- @eslint/js Permite a ESLINT reconocer el codigo JS
+- eslint Biblioteca de linteo
+- eslint-config-airbnb-base Contiene las definiciones basicas de la guia de airbnb para JS
+- eslint-config-prettier Sirve acoplar eslint con prettier
+- globals Tiene variables globales dependientes de la plataforma, ya sea browser o maquina local

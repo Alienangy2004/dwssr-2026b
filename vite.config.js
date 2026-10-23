@@ -2,13 +2,13 @@
 import { defineConfig } from 'vite'
 // Importando un admin de rutas
 import { resolve } from 'node:path'
-//Importando tailwindcss
+// Importando tailwindcss
 import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
     // Directorio raíz de los archivos fuente del front-end
     root: 'src',
-    //Agregando a vite el pluging de tailwindcss
+    // Agregando a vite el pluging de tailwindcss
     plugins: [tailwindcss()], 
     // Configurando un servidor de desarrollo 
     server: {
