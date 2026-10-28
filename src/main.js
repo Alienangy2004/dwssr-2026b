@@ -1,5 +1,5 @@
 // importando los estilos de la pagina
-import './styles/main.css'
+import './styles/main.css';
 
 // imprimiendo en consola
-console.log("VITE + EXPRESS WORKING !!")
+console.warn('VITE + EXPRESS WORKING !!');

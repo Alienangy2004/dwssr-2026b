@@ -66,5 +66,11 @@ export default [
         ...globals.browser
       } 
     } 
+  },
+  {
+    files: ['src/**/*.{js,mjs}'],
+    rules: {
+     'no-console': ['warn', { allow: ['warn', 'error', 'info']}]
+    }
   }
 ];

@@ -13,7 +13,7 @@
     "sourceType": "module"
   },
   "rules": {
-    "no-console": "warn",
+    "no-console": ["warn", { "allow": ["warn", "error", "info"] }],
     "import/extensions": ["error", "ignorePackages", { "js": "always" }],
     "import/no-unresolved": ["error", { "ignore": ["^#"] }],
     "no-underscore-dangle": ["error", { "allow": ["__dirname", "__filename"] }],
