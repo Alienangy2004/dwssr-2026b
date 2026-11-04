@@ -2,22 +2,25 @@
 import createError from 'http-errors';
 // Importa el framework express
 import express from 'express';
+// import { engine } from 'express-handlebars';
 // Importa modulos para manejar rutas (path)
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 // importando el template engine handlebars
-import hbs from 'hbs';
+// import hbs from 'hbs';
 
 // Para cookies
 import cookieParser from 'cookie-parser';
 // Registro para saber que pasa en el servidor (Morgan)
 import morgan from 'morgan';
 // importaando debug
-import createDebug from 'debug';
-import { registerViteHelper } from './lib/vite.js';
+// import createDebug from 'debug';
+// import { registerViteHelper } from './lib/vite.js';
 
-// Importando la configuración de Winston Logger (NUEVO)
+import configureHandlebars from './lib/handlebars.js';
+
+// Importando la configuración de Winston Logger
 import logger from './lib/winston.js';
 
 // Se importan las rutas de la aplicacion
@@ -25,18 +28,20 @@ import indexRouter from '#routes/index.js';
 import usersRouter from '#routes/users.js';
 
 // Recreación de __dirname para ES Modules
-const debug = createDebug('dwssr-2026b:server');
+// const debug = createDebug('dwssr-2026b:server');
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Crea la aplicacion de express
-debug('🔨creado back end');
+// debug('🔨creado back end');
+logger.debug("🔨Creando back end");
 const app = express();
 
 // Configura el motor de vistas
-app.set('views', path.join(__dirname, 'views'));
+configureHandlebars(app);
+/* app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
-registerViteHelper(hbs);
+registerViteHelper(hbs); */
 
 // Configura los middlewares de la aplicacion
 // CONECTANDO MORGAN CON WINSTON (MODIFICADO)
@@ -61,11 +66,13 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // Configuracion de archivos estaticos
-debug('🔨Configuración de archivos estáticos');
+// debug('🔨Configuración de archivos estáticos');
+logger.debug("🔨Configuración de archivos estáticos");
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
 // Registramos las rutas
-debug('🖼 Registramos las rutas');
+// debug('🖼 Registramos las rutas');
+logger.debug("🖼Registramos las rutas");
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
@@ -81,15 +88,5 @@ app.use((err, req, res, _next) => {
   res.status(err.status || 500);
   res.render('error');
 });
-
-// ejemplo de codigo inalcanzable
-// (()=>{
-// let age=10
-
-// if (age< 10) {
-// console.log("age is less than 10")
-// }
-// return age
-// })()
 
 export default app;
