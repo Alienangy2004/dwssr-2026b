@@ -9,8 +9,6 @@ import { fileURLToPath } from 'node:url';
 // importando el template engine handlebars
 import hbs from 'hbs';
 
-// importando el registrador del helper
-
 // Para cookies
 import cookieParser from 'cookie-parser';
 // Registro para saber que pasa en el servidor (Morgan)
@@ -18,6 +16,9 @@ import morgan from 'morgan';
 // importaando debug
 import createDebug from 'debug';
 import { registerViteHelper } from './lib/vite.js';
+
+// Importando la configuración de Winston Logger (NUEVO)
+import logger from './lib/winston.js';
 
 // Se importan las rutas de la aplicacion
 import indexRouter from '#routes/index.js';
@@ -38,7 +39,18 @@ app.set('view engine', 'hbs');
 registerViteHelper(hbs);
 
 // Configura los middlewares de la aplicacion
-app.use(morgan('dev'));
+// CONECTANDO MORGAN CON WINSTON (MODIFICADO)
+app.use(
+  morgan('dev', {
+    stream: {
+      write: (message) => {
+        // Se usa logger.info y se le quitan los espacios adicionales con trim()
+        logger.info(message.trim());
+      },
+    },
+  })
+);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -80,5 +92,4 @@ app.use((err, req, res, _next) => {
 // return age
 // })()
 
-// module.exports = app;
 export default app;

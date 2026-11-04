@@ -1,25 +1,24 @@
-// importando el core de winston
+// Importando el core de winston
 import winston, { format } from 'winston';
-// impportando
 import path from 'node:path';
-
 import fs from 'node:fs';
-// importando winston
+
+// Importando DailyRotateFile
 import DailyRotateFile from 'winston-daily-rotate-file';
 
-// desectuctura funciones utiles de format
+// Desestructura funciones útiles de format
 const { combine, timestamp, label, printf, colorize, prettyPrint } = format;
 
-// creando variable de directorio raiz
+// Creando variable de directorio raíz
 const rootdir = path.resolve(process.cwd());
 
-// creando directorio de logd
+// Creando directorio de logs
 const logDir = path.join(rootdir, 'logs');
 if (!fs.existsSync(logDir)) {
   fs.mkdirSync(logDir, { recursive: true });
 }
 
-// definindo esquema de coloree
+// Definiendo esquema de colores
 const colors = {
   error: 'red',
   warn: 'yellow',
@@ -28,40 +27,41 @@ const colors = {
   debug: 'blue',
 };
 
-// agregando ese esquema a winsron
+// Agregando ese esquema a winston
 winston.addColors(colors);
 
-// creacion de plantillas para los formsatos
+// Creación de plantillas para los formatos
 
-// formato de consola
+// Formato de consola
 const myConsoleFormat = combine(
-  // coloes del formato
+  // Colores del formato
   colorize({ all: true }),
-  // agregando etiqueta a log
+  // Agregando etiqueta al log
   label({ label: '📣: ' }),
-  // registro de feca
+  // Registro de fecha
   timestamp({ format: 'DD-MM-YYYY HH:mm:ss' }),
-  // funcion de imprecion
+  // Función de impresión (Corregido: info.mensaje -> info.message)
   printf(
-    (info) => `${info.level} ${info.label} ${info.timestamp} ${info.mensaje}`,
-  ),
+    (info) => `${info.level} ${info.label} ${info.timestamp} ${info.message}`
+  )
 );
 
-// archivos json
+// Formato de archivos json
 const myFileFormat = combine(
-  // retirar colorizacion
+  // Retirar colorización
   format.uncolorize(),
-  // sgergar fecha i50
+  // Agregar fecha
   timestamp(),
-  // salida
-  format.json(),
+  // Salida json
+  format.json()
 );
 
-// CONTRULLENDO Y CONFI TRANSPORTES
+// CONSTRUYENDO Y CONFIGURANDO TRANSPORTES
+// (Corregido: Se eliminó la duplicación de la carpeta 'logs' en los paths)
 const options = {
   errorFile: {
     level: 'error',
-    filename: path.join(logDir, 'logs', 'error.log'),
+    filename: path.join(logDir, 'error.log'),
     maxsize: 5242880, // 5mb
     maxFiles: 2,
     format: myFileFormat,
@@ -73,18 +73,18 @@ const options = {
   },
   readableFile: {
     level: 'info',
-    filename: path.join(logDir, 'logs', 'readable.log'),
+    filename: path.join(logDir, 'readable.log'),
     maxsize: 5242880, // 5mb
     maxFiles: 2,
     format: combine(
       format.uncolorize(),
       timestamp({ format: 'DD-MM-YYYY HH:mm:ss' }),
-      prettyPrint(),
+      prettyPrint()
     ),
   },
   dailyRotateFile: {
     level: 'info',
-    filename: path.join(logDir, 'logs', 'app-%DATE%.log'),
+    filename: path.join(logDir, 'app-%DATE%.log'),
     datePattern: 'YYYY-MM-DD-HH',
     zippedArchive: true,
     maxsize: 5242880, // 5mb
@@ -93,26 +93,28 @@ const options = {
   },
 };
 
-// creando looger
+// Creando logger
 const logger = winston.createLogger({
   transports: [
     new DailyRotateFile(options.dailyRotateFile),
-    new winston.transport.File(options.readableFile),
-    new winston.transport.File(options.errorFile),
-    new winston.transport.Console(options.console),
+    // Corregido: winston.transport -> winston.transports
+    new winston.transports.File(options.readableFile),
+    new winston.transports.File(options.errorFile),
+    new winston.transports.Console(options.console),
   ],
-  exeptionHandlers: [
-    new winston.transport.File({
+  // Corregido: exeptionHandlers -> exceptionHandlers
+  exceptionHandlers: [
+    new winston.transports.File({
       filename: path.join(logDir, 'exception.log'),
     }),
   ],
   rejectionHandlers: [
-    new winston.transport.File({
+    new winston.transports.File({
       filename: path.join(logDir, 'rejection.log'),
     }),
   ],
   exitOnError: false,
 });
 
-// exportmaos looger
+// Exportamos logger
 export default logger;
