@@ -13,7 +13,16 @@ export default function configureHandlebars(app){
   // estableciendo el layout princiapl en el main
 const exphbs= createHbsEngine({
   estname: ".hbs",
-  defaultLayout: "main"
+  defaultLayout: "main",
+  // Configura las reglas de comportamiento interno del motor de plantillas durante la ejecución
+  runtimeOptions: {
+    /* Permite a la plantilla leer propiedades que un objeto no posee directamente, 
+    sino que heredó de su prototipo base?. En Express, los objetos de error heredan 
+    la propiedad status de la clase nativa Error */
+    allowProtoPropertiesByDefault: true,
+    // Autoriza que la vista ejecute funciones o métodos heredados bajo la misma lógica
+    allowProtoMethodsByDefault: true,
+  },
 });
 
 // registrando el helper de vite
