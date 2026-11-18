@@ -1,11 +1,3 @@
-import express from "express";
+import userRouter from '../modules/users/users.routes.js';
 
-const router = express.Router();
-
-/* GET users listing. */
-// eslint-disable-next-line
-router.get('/', function(req, res, next) {
-  res.send("<h1 style= “color:red”> lista de usurios </h1>");
-});
-
-export default router;
+export default userRouter;
