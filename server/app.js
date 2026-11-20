@@ -24,7 +24,8 @@ import configureHandlebars from './lib/handlebars.js';
 import logger from './lib/winston.js';
 
 // Se importan las rutas de la aplicacion
-import indexRouter from '#routes/index.js';
+import {homeRouter, diagRouter} from '#routes/index.js';
+// import indexRouter from '#routes/index.js';
 import usersRouter from '#routes/users.js';
 
 // Recreación de __dirname para ES Modules
@@ -73,7 +74,11 @@ app.use(express.static(path.join(__dirname, '..', 'public')));
 // Registramos las rutas
 // debug('🖼 Registramos las rutas');
 logger.debug("🖼Registramos las rutas");
-app.use('/', indexRouter);
+// app.use('/', indexRouter);
+app.use('/', homeRouter);
+if (process.env.NODE_ENV === 'production') {
+app.use('/', diagRouter);
+}
 app.use('/users', usersRouter);
 
 // Catch 404 and forward to error handler

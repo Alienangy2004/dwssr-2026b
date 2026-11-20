@@ -1,6 +1,11 @@
 import homeRouter from '../modules/home/home.routes.js';
+import diagRouter from '../modules/diagnostics/diagnostics.routes.js';
 
-export default homeRouter;
+export {
+    homeRouter,
+    diagRouter,
+};
+
 
 // import express from 'express';
 // // Importando el logger de Winston
